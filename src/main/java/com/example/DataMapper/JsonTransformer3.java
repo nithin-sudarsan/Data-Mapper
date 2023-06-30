@@ -86,9 +86,13 @@ public class JsonTransformer3 {
             // Exclude the special keyword '#sum'
             if (!path.equals("#sum")) {
                 // Traverse the JSON using the specified path
-                String value = (String) traverseJson(json, path);
-                if (value != null) {
-                    valuesToConcatenate.add(value);
+                Object value = traverseJson(json, path); // Use Object type for the value
+
+                if (value instanceof String) {
+                    valuesToConcatenate.add((String) value);
+                } else if (value instanceof ArrayList) {
+                    List<String> listValue = (ArrayList) value;
+                    valuesToConcatenate.addAll(listValue);
                 }
             }
         }

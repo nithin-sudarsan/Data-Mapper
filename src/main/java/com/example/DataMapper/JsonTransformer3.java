@@ -49,7 +49,9 @@ public class JsonTransformer3 {
             if (rhs.contains("#sum")) {
                 // Concatenate values based on the specified paths
                 value = concatenateValues(json, rhs);
-            } else {
+            } else if (rhs.contains("#diff")){
+                value = findDifference(json, rhs);
+            }else {
                 // Join the elements of the right-hand side list with '/' separator
                 String rhsString = String.join("/", rhs);
                 // Traverse the JSON using the right-hand side path and retrieve the values
@@ -59,6 +61,43 @@ public class JsonTransformer3 {
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
+    }
+
+    private static Object findDifference(Map<String, Object> json, List<String> rhs) {
+        double sum = 0.0;
+        boolean initial=true;
+        // Iterate over the paths
+        for (String path : rhs) {
+            if (!path.equals("#diff")) {
+            Object value= traverseJson(json,path);
+            if (value instanceof Integer || value instanceof Double) {
+                // Numeric value found, add it to the sum
+                double numericValue = ((Number) value).doubleValue();
+                if(initial){
+                    sum+=numericValue;
+                    initial=false;
+                }
+                else {
+                    sum-=numericValue;
+                }
+            }
+            else if (value instanceof ArrayList) {
+                // ArrayList value found
+                List<?> listValue = (ArrayList<?>) value;
+                if (areAllNumbers(listValue)) {
+                    // Nested list contains only numbers, calculate the nested sum
+                    double nestedSum = diffNestedNumbers(listValue,sum);
+                    sum -= nestedSum;
+                } else {
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        }
+        }
+        return sum;
     }
 
     // Recursive method to combine two maps
@@ -169,6 +208,28 @@ public class JsonTransformer3 {
                 // Nested list found, recursively calculate the nested sum
                 double nestedSum = sumNestedNumbers((List<?>) item);
                 sum += nestedSum;
+            }
+        }
+        return sum;
+    }
+    private static double diffNestedNumbers(List<?> list, double sum) {
+        boolean initial=true;
+        for (Object item : list) {
+            if (item instanceof Integer || item instanceof Double) {
+                // Numeric element found, add it to the sum
+                double numericValue = ((Number) item).doubleValue();
+                if(sum==0){
+                    sum+=numericValue;
+                    out.println(sum);
+                    initial=false;
+                }
+                else {
+                    sum-=numericValue;
+                }
+            } else if (item instanceof ArrayList) {
+                // Nested list found, recursively calculate the nested sum
+                double nestedSum = diffNestedNumbers((List<?>) item,sum);
+                sum -= nestedSum;
             }
         }
         return sum;

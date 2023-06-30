@@ -81,23 +81,97 @@ public class JsonTransformer3 {
 
     // Method to perform concatenation based on the specified paths
     private static Object concatenateValues(Map<String, Object> json, List<String> rhs) {
-        List<String> valuesToConcatenate = new ArrayList<>();
+        // Initialize variables
+        double sum = 0.0;
+        StringBuilder concatenatedString = new StringBuilder();
+        boolean hasString = false;
+
+        // Iterate over the paths
         for (String path : rhs) {
             // Exclude the special keyword '#sum'
             if (!path.equals("#sum")) {
                 // Traverse the JSON using the specified path
-                Object value = traverseJson(json, path); // Use Object type for the value
+                Object value = traverseJson(json, path);
 
-                if (value instanceof String) {
-                    valuesToConcatenate.add((String) value);
+                // Check the type of the value
+                if (value instanceof Integer || value instanceof Double) {
+                    // Numeric value found, add it to the sum
+                    double numericValue = ((Number) value).doubleValue();
+                    sum += numericValue;
+                } else if (value instanceof String) {
+                    // String value found
+                    if (hasString) {
+                        // Append a space before appending the value if there is already a string
+                        concatenatedString.append(" ");
+                    }
+                    concatenatedString.append(value);
+                    hasString = true;
                 } else if (value instanceof ArrayList) {
-                    List<String> listValue = (ArrayList) value;
-                    valuesToConcatenate.addAll(listValue);
+                    // ArrayList value found
+                    List<?> listValue = (ArrayList<?>) value;
+                    if (areAllNumbers(listValue)) {
+                        // Nested list contains only numbers, calculate the nested sum
+                        double nestedSum = sumNestedNumbers(listValue);
+                        sum += nestedSum;
+                    } else {
+                        // Nested list contains non-number elements, concatenate them
+                        for (Object listItem : listValue) {
+                            if (hasString) {
+                                // Append a space before appending the list item if there is already a string
+                                concatenatedString.append(" ");
+                            }
+                            concatenatedString.append(listItem);
+                            hasString = true;
+                        }
+                    }
                 }
             }
         }
-        // Join the values with a space separator
-        return String.join(" ", valuesToConcatenate);
+
+        // Return the result
+        if (hasString) {
+            return concatenatedString.toString();
+        } else {
+            return sum;
+        }
+    }
+
+    // Helper method to check if all elements in a list (including nested lists) are numbers
+    private static boolean areAllNumbers(List<?> list) {
+        for (Object item : list) {
+            if (item instanceof Integer || item instanceof Double) {
+                // Numeric element found, continue checking
+                continue;
+            } else if (item instanceof List) {
+                // Nested list found, recursively check if it contains only numbers
+                List<?> nestedList = (List<?>) item;
+                if (!areAllNumbers(nestedList)) {
+                    return false;
+                }
+            } else {
+                // Non-numeric element found, return false
+                return false;
+            }
+        }
+        // All elements are numbers
+        return true;
+    }
+
+    // Helper method to calculate the sum of all numbers in a list (including nested lists)
+    private static double sumNestedNumbers(List<?> list) {
+        double sum = 0.0;
+        for (Object item : list) {
+            if (item instanceof Integer || item instanceof Double) {
+                // Numeric element found, add it to the sum
+                double numericValue = ((Number) item).doubleValue();
+                sum += numericValue;
+            } else if (item instanceof ArrayList) {
+                // Nested list found, recursively calculate the nested sum
+                double nestedSum = sumNestedNumbers((List<?>) item);
+                sum += nestedSum;
+            }
+        }
+        return sum;
     }
 
     // Method to set a value in the JSON based on the specified path
@@ -122,41 +196,50 @@ public class JsonTransformer3 {
     // Method to traverse the JSON based on the specified path
     private static Object traverseJson(Object json, String path) {
         String[] keys = path.split("/");
-        for (int i=0; i<keys.length; i++){
-            String key=keys[i];
-            if(keys[i].endsWith("[]") ){
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            if (keys[i].endsWith("[]")) {
                 // Handle array traversal
                 key = key.substring(0, key.length() - 2);
                 json = ((Map<?, ?>) json).get(key);
                 // Get a list of items from the array
                 List<Object> resultList = getListItems(json);
-                List<Object> outputList= new ArrayList<>();
-                for (Object item: resultList){
+                List<Object> outputList = new ArrayList<>();
+                for (Object item : resultList) {
                     // Get the remaining path after the current key
                     String remainingPath = String.join("/", Arrays.copyOfRange(keys, i + 1, keys.length));
                     // Recursively traverse the JSON with the remaining path
-                    json=traverseJson(item, remainingPath);
-                    if(json!=null){ outputList.add(json);}
+                    Object result = traverseJson(item, remainingPath);
+                    if (result != null) {
+                        outputList.add(result);
+                    }
                 }
                 // Check if any non-null values were found in the output list
-                if(outputList.size()>0){
+                if (outputList.size() > 0) {
                     return outputList;
+                } else {
+                    return null;
                 }
-                else {return null;}
-            }
-            else {
+            } else {
                 // Check if the JSON contains the key
-                if(((Map) json).containsKey(key)){
+                if (((Map<?, ?>) json).containsKey(key)) {
                     // Access the value using the specified key
-                    json = ((Map<?, ?>) json).get(key);}
-                else {
+                    json = ((Map<?, ?>) json).get(key);
+                } else {
                     // If the key is not found, return null
                     return null;
                 }
             }
         }
+        // Handle returning int or double values
+        if (json instanceof Integer || json instanceof Double) {
+            List<Object> numericList = new ArrayList<>();
+            numericList.add(json);
+            return numericList;
+        }
         return json;
     }
+
 
     // Method to read the transformation rules from the specified file
     private static Map<List<String>, List<String>> readTransformationRules(String formatFilePath) {

@@ -51,7 +51,11 @@ public class JsonTransformer3 {
                 value = concatenateValues(json, rhs);
             } else if (rhs.contains("#diff")){
                 value = findDifference(json, rhs);
-            }else {
+            }
+            else if (rhs.contains("#prod")){
+                value = findProduct(json, rhs);
+            }
+            else {
                 // Join the elements of the right-hand side list with '/' separator
                 String rhsString = String.join("/", rhs);
                 // Traverse the JSON using the right-hand side path and retrieve the values
@@ -61,6 +65,62 @@ public class JsonTransformer3 {
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
+    }
+
+    private static Object findProduct(Map<String, Object> json, List<String> rhs) {
+        double prod = 0.0;
+        boolean initial=true;
+        // Iterate over the paths
+        for (String path : rhs) {
+            if (!path.equals("#prod")) {
+                Object value= traverseJson(json,path);
+                if (value instanceof Integer || value instanceof Double) {
+                    // Numeric value found, add it to the sum
+                    double numericValue = ((Number) value).doubleValue();
+                    if(initial){
+                        prod+=numericValue;
+                        initial=false;
+                    }
+                    else {
+                        prod*=numericValue;
+                    }
+                }
+                else if (value instanceof ArrayList) {
+                    // ArrayList value found
+                    List<?> listValue = (ArrayList<?>) value;
+                    if (areAllNumbers(listValue)) {
+                        // Nested list contains only numbers, calculate the nested sum
+                        prod = prodNestedNumbers(listValue,prod);
+
+                    } else {
+                        return null;
+                    }
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        return prod;
+    }
+
+    private static double prodNestedNumbers(List<?> list, double prod) {
+        for (Object item : list) {
+            if (item instanceof Integer || item instanceof Double) {
+                // Numeric element found, add it to the sum
+                double numericValue = ((Number) item).doubleValue();
+                if(prod==0){
+                    prod+=numericValue;
+                }
+                else {
+                    prod*=numericValue;
+                }
+            } else if (item instanceof ArrayList) {
+                // Nested list found, recursively calculate the nested sum
+                prod = prodNestedNumbers((List<?>) item,prod);
+            }
+        }
+        return prod;
     }
 
     private static Object findDifference(Map<String, Object> json, List<String> rhs) {
@@ -213,15 +273,12 @@ public class JsonTransformer3 {
         return sum;
     }
     private static double diffNestedNumbers(List<?> list, double sum) {
-        boolean initial=true;
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the sum
                 double numericValue = ((Number) item).doubleValue();
                 if(sum==0){
                     sum+=numericValue;
-                    out.println(sum);
-                    initial=false;
                 }
                 else {
                     sum-=numericValue;

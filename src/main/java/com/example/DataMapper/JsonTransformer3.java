@@ -3,6 +3,7 @@ package com.example.DataMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.json.JsonObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,7 +37,27 @@ public class JsonTransformer3 {
         out.println(transformedJson);
     }
 
-    private static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) {
+    public <T>T getObjectFromInput(String inputPath, String formatPath, Class<T> className){
+        // Read the transformation rules from the file
+        Map<List<String>, List<String>> transformationRules = readTransformationRules(formatPath);
+        String jsonString;
+        try {
+            // Read the JSON file contents into a string
+            jsonString = new String(Files.readAllBytes(Paths.get(inputPath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        // Create a Gson instance to parse the JSON string
+        Gson gson = new GsonBuilder().create();
+        // Convert the JSON string to a Map
+        Map<String, Object> json = gson.fromJson(jsonString, Map.class);
+        // Transform the JSON using the rules from format.txt
+        Map<String, Object> transformedJson = transformJson(transformationRules, json);
+        return gson.fromJson(gson.toJson(transformedJson.get(className.getSimpleName())), className);
+    }
+
+    static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) {
         // Create a new map to store the transformed JSON
         Map<String, Object> transformedJson = new HashMap<>();
         // Iterate over the transformation rules
@@ -360,7 +381,7 @@ public class JsonTransformer3 {
 
 
     // Method to read the transformation rules from the specified file
-    private static Map<List<String>, List<String>> readTransformationRules(String formatFilePath) {
+    static Map<List<String>, List<String>> readTransformationRules(String formatFilePath) {
         Map<List<String>, List<String>> transformationRules = new HashMap<>();
         try (Stream<String> stream = Files.lines(Paths.get(formatFilePath))) {
             stream.forEach(line -> {

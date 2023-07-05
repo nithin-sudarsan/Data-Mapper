@@ -76,6 +76,9 @@ public class JsonTransformer3 {
             else if (rhs.contains("#prod")){
                 value = findProduct(json, rhs);
             }
+            else if (rhs.contains("#default")){
+                value= setDefault(rhs);
+            }
             else {
                 // Join the elements of the right-hand side list with '/' separator
                 String rhsString = String.join("/", rhs);
@@ -86,6 +89,11 @@ public class JsonTransformer3 {
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
+    }
+
+    private static Object setDefault(List<String> rhs) {
+        int defIndex= rhs.indexOf("#default");
+        return rhs.get(defIndex+1);
     }
 
     private static Object findProduct(Map<String, Object> json, List<String> rhs) {

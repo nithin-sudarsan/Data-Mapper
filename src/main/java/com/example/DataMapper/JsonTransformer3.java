@@ -128,8 +128,12 @@ public class JsonTransformer3 {
                 String rhsString = String.join("/", rhs);
                 // Traverse the JSON using the right-hand side path and retrieve the values
                 value = traverseJson(json, rhsString);
+                if (value instanceof ArrayList<?> && ((ArrayList<?>) value).size()==1){
+                    value=((ArrayList<?>) value).get(0);
+                }
             }
             // Update the transformed JSON by setting the value at the specified left-hand side path
+
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
@@ -408,7 +412,8 @@ public class JsonTransformer3 {
                 // Check if any non-null values were found in the output list
                 if (outputList.size() > 0) {
                     return outputList;
-                } else {
+                }
+                else {
                     return null;
                 }
             } else {

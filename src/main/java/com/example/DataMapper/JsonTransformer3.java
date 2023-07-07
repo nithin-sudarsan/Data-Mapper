@@ -1,10 +1,15 @@
 package com.example.DataMapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.json.JsonObject;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -37,24 +42,63 @@ public class JsonTransformer3 {
         out.println(transformedJson);
     }
 
-    public <T>T getObjectFromInput(String inputPath, String formatPath, Class<T> className){
+    public <T>T getObjectFromInputFile(String inputPath, String formatPath, Class<T> className) throws JsonProcessingException {
         // Read the transformation rules from the file
         Map<List<String>, List<String>> transformationRules = readTransformationRules(formatPath);
-        String jsonString;
+        String fileString;
         try {
             // Read the JSON file contents into a string
-            jsonString = new String(Files.readAllBytes(Paths.get(inputPath)));
+            fileString = new String(Files.readAllBytes(Paths.get(inputPath)));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-        // Create a Gson instance to parse the JSON string
-        Gson gson = new GsonBuilder().create();
-        // Convert the JSON string to a Map
-        Map<String, Object> json = gson.fromJson(jsonString, Map.class);
-        // Transform the JSON using the rules from format.txt
-        Map<String, Object> transformedJson = transformJson(transformationRules, json);
-        return gson.fromJson(gson.toJson(transformedJson.get(className.getSimpleName())), className);
+        Gson gson = null;
+        if (inputPath.endsWith(".json")) {
+            // Create a Gson instance to parse the JSON string
+            gson = new GsonBuilder().create();
+            // Convert the JSON string to a Map
+            Map<String, Object> json = gson.fromJson(fileString, Map.class);
+            // Transform the JSON using the rules from format.txt
+            Map<String, Object> transformedJson = transformJson(transformationRules, json);
+            return gson.fromJson(gson.toJson(transformedJson.get(className.getSimpleName())), className);
+        } else if (inputPath.endsWith(".xml")) {
+            XmlMapper xmlMapper = new XmlMapper();
+
+            // Enable XML-specific features (optional)
+            xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+            // Convert XML to a Map
+            Map<String, Object> xmlMap = xmlMapper.readValue(fileString, HashMap.class);
+            Map<String, Object> transformedXml = transformJson(transformationRules, xmlMap);
+            return gson.fromJson(gson.toJson(transformedXml.get(className.getSimpleName())), className);
+        }
+        else return null;
+    }
+
+    public <T>T getObjectFromInputString(String inputString, String formatString, Class<T> className) throws JsonProcessingException {
+        Map<List<String>, List<String>> transformationRules = readTransformationRulesFromString(formatString);
+        Gson gson = null;
+        if (inputString.startsWith("{")) {
+            // Create a Gson instance to parse the JSON string
+            gson = new GsonBuilder().create();
+            // Convert the JSON string to a Map
+            Map<String, Object> json = gson.fromJson(inputString, Map.class);
+            // Transform the JSON using the rules from format.txt
+            Map<String, Object> transformedJson = transformJson(transformationRules, json);
+            return gson.fromJson(gson.toJson(transformedJson.get(className.getSimpleName())), className);
+        } else if (inputString.startsWith("<")) {
+            XmlMapper xmlMapper = new XmlMapper();
+
+            // Enable XML-specific features (optional)
+            xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+            // Convert XML to a Map
+            Map<String, Object> xmlMap = xmlMapper.readValue(inputString, HashMap.class);
+            Map<String, Object> transformedXml = transformJson(transformationRules, xmlMap);
+            return gson.fromJson(gson.toJson(transformedXml.get(className.getSimpleName())), className);
+        }
+        else return null;
     }
 
     static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) {
@@ -406,6 +450,28 @@ public class JsonTransformer3 {
         }
         return transformationRules;
     }
+
+    static Map<List<String>, List<String>> readTransformationRulesFromString(String rulesString) {
+        Map<List<String>, List<String>> transformationRules = new HashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new StringReader(rulesString))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=");
+                String sourceKey = parts[0].trim();
+                String targetKey = parts[1].trim();
+                List<String> sourceList = Arrays.asList(sourceKey);
+                List<String> targetList = Arrays.asList(targetKey.split(" "));
+
+                transformationRules.put(sourceList, targetList);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return transformationRules;
+    }
+
 
     // Method to convert a JSON object to a list of items
     private static List<Object> getListItems(Object json) {

@@ -18,31 +18,10 @@ import java.util.stream.Stream;
 import static java.lang.System.*;
 
 public class JsonTransformer3 {
-    public static void main(String[] args) {
-        // Path to the file containing the transformation rules
-        String formatFilePath = "/home/nithin/Desktop/format.txt";
-        // Read the transformation rules from the file
-        Map<List<String>, List<String>> transformationRules = readTransformationRules(formatFilePath);
-        // Path to the JSON file to transform
-        String jsonFilePath = "/home/nithin/Desktop/sample.json";
-        String jsonString;
-        try {
-            // Read the JSON file contents into a string
-            jsonString = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        // Create a Gson instance to parse the JSON string
-        Gson gson = new GsonBuilder().create();
-        // Convert the JSON string to a Map
-        Map<String, Object> json = gson.fromJson(jsonString, Map.class);
-        // Transform the JSON using the rules from format.txt
-        Map<String, Object> transformedJson = transformJson(transformationRules, json);
-        out.println(transformedJson);
-    }
 
-    public <T>T getObjectFromInputFile(String inputPath, String formatPath, Class<T> className) throws JsonProcessingException {
+    // static factory methods
+    public static <T>T transformFile(String inputPath, String formatPath, Class<T> className) throws JsonProcessingException { //INTERFACE-IMPL
+
         // Read the transformation rules from the file
         Map<List<String>, List<String>> transformationRules = readTransformationRules(formatPath);
         String fileString;
@@ -63,7 +42,7 @@ public class JsonTransformer3 {
             Map<String, Object> transformedJson = transformJson(transformationRules, json);
             return gson.fromJson(gson.toJson(transformedJson.get(className.getSimpleName())), className);
         } else if (inputPath.endsWith(".xml")) {
-            XmlMapper xmlMapper = new XmlMapper();
+            final var xmlMapper = new XmlMapper();
 
             // Enable XML-specific features (optional)
             xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -76,7 +55,13 @@ public class JsonTransformer3 {
         else return null;
     }
 
-    public <T>T getObjectFromInputString(String inputString, String formatString, Class<T> className) throws JsonProcessingException {
+    public static String getString(){
+        return null;
+    } //INTERFACE-IMPL
+
+
+    //static factory methods
+    public static <T>T transformString(String inputString, String formatString, Class<T> className) throws JsonProcessingException {  //INTERFACE-IMPL
         Map<List<String>, List<String>> transformationRules = readTransformationRulesFromString(formatString);
         Gson gson = null;
         if (inputString.startsWith("{")) {
@@ -101,7 +86,7 @@ public class JsonTransformer3 {
         else return null;
     }
 
-    static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) {
+    private static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) { //LOGIC
         // Create a new map to store the transformed JSON
         Map<String, Object> transformedJson = new HashMap<>();
         // Iterate over the transformation rules
@@ -139,12 +124,12 @@ public class JsonTransformer3 {
         return transformedJson;
     }
 
-    private static Object setDefault(List<String> rhs) {
+    private static Object setDefault(List<String> rhs) {  //LOGIC
         int defIndex= rhs.indexOf("#default");
         return rhs.get(defIndex+1);
     }
 
-    private static Object findProduct(Map<String, Object> json, List<String> rhs) {
+    private static Object findProduct(Map<String, Object> json, List<String> rhs) {  //LOGIC
         double prod = 0.0;
         boolean initial=true;
         // Iterate over the paths
@@ -181,7 +166,7 @@ public class JsonTransformer3 {
         return prod;
     }
 
-    private static double prodNestedNumbers(List<?> list, double prod) {
+    private static double prodNestedNumbers(List<?> list, double prod) { //LOGIC
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the sum
@@ -200,7 +185,7 @@ public class JsonTransformer3 {
         return prod;
     }
 
-    private static Object findDifference(Map<String, Object> json, List<String> rhs) {
+    private static Object findDifference(Map<String, Object> json, List<String> rhs) { // LOGIC
         double sum = 0.0;
         boolean initial=true;
         // Iterate over the paths
@@ -238,7 +223,7 @@ public class JsonTransformer3 {
     }
 
     // Recursive method to combine two maps
-    private static void combineMaps(Map<String, Object> targetMap, Map<String, Object> sourceMap) {
+    private static void combineMaps(Map<String, Object> targetMap, Map<String, Object> sourceMap) {  //HELPER
         for (Map.Entry<String, Object> entry : sourceMap.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -256,7 +241,7 @@ public class JsonTransformer3 {
     }
 
     // Method to perform concatenation based on the specified paths
-    private static Object concatenateValues(Map<String, Object> json, List<String> rhs) {
+    private static Object concatenateValues(Map<String, Object> json, List<String> rhs) {  //LOGIC
         // Initialize variables
         double sum = 0.0;
         StringBuilder concatenatedString = new StringBuilder();
@@ -303,7 +288,6 @@ public class JsonTransformer3 {
                 }
             }
         }
-
         // Return the result
         if (hasString) {
             return concatenatedString.toString();
@@ -313,7 +297,7 @@ public class JsonTransformer3 {
     }
 
     // Helper method to check if all elements in a list (including nested lists) are numbers
-    private static boolean areAllNumbers(List<?> list) {
+    private static boolean areAllNumbers(List<?> list) {  //HELPER
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, continue checking
@@ -334,7 +318,7 @@ public class JsonTransformer3 {
     }
 
     // Helper method to calculate the sum of all numbers in a list (including nested lists)
-    private static double sumNestedNumbers(List<?> list) {
+    private static double sumNestedNumbers(List<?> list) { //HELPER
         double sum = 0.0;
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
@@ -349,7 +333,7 @@ public class JsonTransformer3 {
         }
         return sum;
     }
-    private static double diffNestedNumbers(List<?> list, double sum) {
+    private static double diffNestedNumbers(List<?> list, double sum) { //HELPER
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the sum
@@ -370,7 +354,7 @@ public class JsonTransformer3 {
     }
 
     // Method to set a value in the JSON based on the specified path
-    private static Map<String, Object> setValueInJson(String path, Object value) {
+    private static Map<String, Object> setValueInJson(String path, Object value) { //HELPER
         Map<String, Object> current = new HashMap<>();
         String[] keys = path.split("/");
         Map<String, Object> innerMap = current;
@@ -389,7 +373,7 @@ public class JsonTransformer3 {
     }
 
     // Method to traverse the JSON based on the specified path
-    private static Object traverseJson(Object json, String path) {
+    private static Object traverseJson(Object json, String path) {  //LOGIC
         String[] keys = path.split("/");
         for (int i = 0; i < keys.length; i++) {
             String key = keys[i];
@@ -438,7 +422,7 @@ public class JsonTransformer3 {
 
 
     // Method to read the transformation rules from the specified file
-    static Map<List<String>, List<String>> readTransformationRules(String formatFilePath) {
+    private static Map<List<String>, List<String>> readTransformationRules(String formatFilePath) { //LOGIC
         Map<List<String>, List<String>> transformationRules = new HashMap<>();
         try (Stream<String> stream = Files.lines(Paths.get(formatFilePath))) {
             stream.forEach(line -> {
@@ -456,7 +440,7 @@ public class JsonTransformer3 {
         return transformationRules;
     }
 
-    static Map<List<String>, List<String>> readTransformationRulesFromString(String rulesString) {
+    private static Map<List<String>, List<String>> readTransformationRulesFromString(String rulesString) {
         Map<List<String>, List<String>> transformationRules = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new StringReader(rulesString))) {
@@ -479,7 +463,7 @@ public class JsonTransformer3 {
 
 
     // Method to convert a JSON object to a list of items
-    private static List<Object> getListItems(Object json) {
+    private static List<Object> getListItems(Object json) { //LOGIC HELPERS
         List<Object> result = new ArrayList<>();
         List<?> list = (List<?>) json;
         for (Object item : list) {

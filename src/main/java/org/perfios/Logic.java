@@ -103,14 +103,17 @@ class Logic {
             String lhsString= lhs.get(0);
             Object value;
             // Check if the right-hand side contains a special keyword '#sum'
-            if (rhs.contains("#sum")) {
+            if (rhs.contains("#add")) {
                 // Concatenate values based on the specified paths
                 value = concatenateValues(json, rhs);
-            } else if (rhs.contains("#diff")){
+            } else if (rhs.contains("#sub")){
                 value = findDifference(json, rhs);
             }
-            else if (rhs.contains("#prod")){
+            else if (rhs.contains("#mul")){
                 value = findProduct(json, rhs);
+            }
+            else if (rhs.contains("#div")){
+                value = findQuotient(json, rhs);
             }
             else if (rhs.contains("#default")){
                 value= setDefault(rhs);
@@ -128,6 +131,41 @@ class Logic {
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
+    }
+    static Object findQuotient(Map<String, Object> json, List<String> rhs){
+        double quo = 0.0;
+        boolean initial=true;
+        // Iterate over the paths
+        for (String path : rhs) {
+            if (!path.equals("#div")) {
+                Object value= traverseJson(json,path);
+                if (value instanceof Integer || value instanceof Double) {
+                    // Numeric value found, add it to the quotient
+                    double numericValue = ((Number) value).doubleValue();
+                    if(initial){
+                        quo+=numericValue;
+                        initial=false;
+                    }
+                    else {
+                        quo/=numericValue;
+                    }
+                }
+                else if (value instanceof ArrayList) {
+                    // ArrayList value found
+                    List<?> listValue = (ArrayList<?>) value;
+                    if (areAllNumbers(listValue)) {
+                        // Nested list contains only numbers, calculate the nested quotient
+                        quo = quotientNestedNumbers(listValue,quo);
+                    } else {
+                        throw new IllegalArgumentException("illegal argument");
+                    }
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        return quo;
     }
     //#SUM
     static Object concatenateValues(Map<String, Object> json, List<String> rhs){

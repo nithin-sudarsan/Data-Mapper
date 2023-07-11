@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="56992970-c5ab-4232-91a6-757c68b0f73e" name="Changes" comment="Handled single element arrays in transformJson">
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/DataMapperApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/JsonJQ.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/JsonTransformer3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/JsonTransformer3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/XMLParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DataMapper/XMLParser.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2QrZ3oADuS3FmQJDFOxWDqRRtLo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/home/nithin/Desktop/jspractice/API-Playground-Backend",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Test">
+    <configuration name="JsonJQ" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.DataMapper.JsonJQ" />
+      <module name="DataMapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DataMapper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonTransformer3" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.DataMapper.JsonTransformer3" />
+      <module name="DataMapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DataMapper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.DataMapper.Test" />
+      <module name="DataMapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DataMapper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XMLParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.DataMapper.XMLParser" />
+      <module name="DataMapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DataMapper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.JsonTransformer3" />
+        <item itemvalue="Application.XMLParser" />
+        <item itemvalue="Application.JsonJQ" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="56992970-c5ab-4232-91a6-757c68b0f73e" name="Changes" comment="" />
+      <created>1686113464195</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1686113464195</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Concatenation of ArrayList and String">
+      <option name="closed" value="true" />
+      <created>1688104393316</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1688104393316</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Addition perfromed if numbers are encountered">
+      <option name="closed" value="true" />
+      <created>1688114200558</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688114200558</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added &quot;#diff&quot; functionality">
+      <option name="closed" value="true" />
+      <created>1688141300908</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1688141300908</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added &quot;#prod&quot; functionality">
+      <option name="closed" value="true" />
+      <created>1688192617364</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1688192617364</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Implemented getObjectFromInput method">
+      <option name="closed" value="true" />
+      <created>1688554638039</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1688554638039</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Implemented #default rule">
+      <option name="closed" value="true" />
+      <created>1688555195896</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1688555195896</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Implemented getObjectFromInputFile and getObjectFromInputString">
+      <option name="closed" value="true" />
+      <created>1688711477548</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1688711477548</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Handled single element arrays in transformJson">
+      <option name="closed" value="true" />
+      <created>1688712519338</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1688712519338</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Concatenation of ArrayList and String" />
+    <MESSAGE value="Addition perfromed if numbers are encountered" />
+    <MESSAGE value="Added &quot;#diff&quot; functionality" />
+    <MESSAGE value="Added &quot;#prod&quot; functionality" />
+    <MESSAGE value="Implemented getObjectFromInput method" />
+    <MESSAGE value="Implemented #default rule" />
+    <MESSAGE value="Implemented getObjectFromInputFile and getObjectFromInputString" />
+    <MESSAGE value="Handled single element arrays in transformJson" />
+    <option name="LAST_COMMIT_MESSAGE" value="Handled single element arrays in transformJson" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassCastException" package="java.lang" />
+          <option name="timeStamp" value="6" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

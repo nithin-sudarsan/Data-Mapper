@@ -72,7 +72,7 @@ class Logic {
                     return outputList;
                 }
                 else {
-                    return null;
+                    throw new RuntimeException("No values found in the input file");
                 }
             } else {
                 // Check if the JSON contains the key
@@ -214,11 +214,11 @@ class Logic {
                         double nestedSum = diffNestedNumbers(listValue,diff);
                         diff -= nestedSum;
                     } else {
-                        return null;
+                        throw new RuntimeException("All elements in the ArrayList must be numbers");
                     }
                 }
                 else {
-                    return null;
+                    throw new RuntimeException("Cannot perform subtraction on values other than Number or ArrayList of numbers");
                 }
             }
         }
@@ -251,11 +251,11 @@ class Logic {
                         prod = prodNestedNumbers(listValue,prod);
 
                     } else {
-                        return null;
+                        throw new RuntimeException("All elements in the ArrayList must be numbers");
                     }
                 }
                 else {
-                    return null;
+                    throw new RuntimeException("Cannot perform multiplication on values other than Number or ArrayList of numbers");
                 }
             }
         }
@@ -287,11 +287,11 @@ class Logic {
                         quo = divideNestedNumbers(listValue,quo);
 
                     } else {
-                        return null;
+                        throw new RuntimeException("All elements in the ArrayList must be numbers");
                     }
                 }
                 else {
-                    return null;
+                    throw new RuntimeException("Cannot perform division on values other than Number or ArrayList of numbers");
                 }
             }
         }

@@ -20,13 +20,17 @@ import static org.perfios.Logic.transformJson;
 
 public final class DataMapperImpl implements DataMapper{
     /**
-     * Transforms XML or JSON file to the desired bean
-     * @param inputPath asdknad
-     * @param rulesPath
-     * @param className
-     * @return T
-     * @param <T> Model class
-     * @throws IOException
+     * Transforms a JSON or XML file according to specified rules and returns an instance of the desired class type.
+     *
+     * @param inputPath  The path to the input file (JSON or XML) to be transformed.
+     * @param rulesPath  The path to the rules file containing transformation rules.
+     * @param className  The desired class type to be returned after transformation.
+     * @param <T>        The generic type representing the desired class type.
+     * @return An instance of the desired class type, representing the transformed data.
+     * @throws IOException If an I/O error occurs while reading the input or rules file.
+     * @throws IllegalArgumentException If the inputPath or rulesPath is null or empty.
+     * @throws RuntimeException If there is an error parsing the input file or applying transformation rules.
+     * @author S.Nithin
      */
     @Override
     public <T> T transformFile(String inputPath, String rulesPath, Class<T> className) throws IOException {
@@ -72,6 +76,19 @@ public final class DataMapperImpl implements DataMapper{
             throw new IllegalArgumentException("Unsupported file format: inputPath must have .json or .xml extension.");
         }
     }
+    /**
+     * Transforms a JSON or XML string according to specified rules and returns an instance of the desired class type.
+     *
+     * @param inputString  The JSON or XML string to be transformed.
+     * @param rulesString  The string containing transformation rules.
+     * @param className    The desired class type to be returned after transformation.
+     * @param <T>          The generic type representing the desired class type.
+     * @return An instance of the desired class type, representing the transformed data.
+     * @throws JsonProcessingException If there is an error processing the JSON or XML string.
+     * @throws IllegalArgumentException If the inputString or rulesString is null or empty, or if the inputString is not a valid JSON or XML string.
+     * @throws RuntimeException If there is an error applying transformation rules.
+     * @author S.Nithin
+     */
     @Override
     public <T> T transformString(String inputString, String rulesString, Class<T> className) throws JsonProcessingException {
         if (inputString == null || inputString.isEmpty() || rulesString == null || rulesString.isEmpty()) {
@@ -105,6 +122,17 @@ public final class DataMapperImpl implements DataMapper{
             throw new RuntimeException("Error processing input: " + e.getMessage(), e);
         }
     }
+    /**
+     * Transforms an input JSON or XML file or string according to specified rules and returns a string representing the transformed input.
+     *
+     * @param input     The input JSON or XML file path or string to be transformed.
+     * @param rules     The rules file path or string containing transformation rules.
+     * @param isString  A boolean value indicating whether the input is a string (true) or a file path (false).
+     * @return A string representing the transformed JSON or XML input.
+     * @throws IllegalArgumentException If the input or rules are null or empty, or if the input is not a valid JSON or XML string (when isString is true).
+     * @throws RuntimeException If there is an error parsing or processing the input or applying transformation rules.
+     * @author S.Nithin
+     */
     @Override
     public String getTransformedString(String input, String rules, boolean isString) {
         if (isString) {

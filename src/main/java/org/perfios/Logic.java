@@ -93,7 +93,7 @@ class Logic {
         }
         return json;
     }
-    static Map<String, Object> transformJson(Map<List<String>, List<String>> transformationRules, Map<String, Object> json) { //LOGIC
+    static Map<String, Object> transformJson(Map<List<String>,List<String>> transformationRules, Map<String, Object> json){
         // Create a new map to store the transformed JSON
         Map<String, Object> transformedJson = new HashMap<>();
         // Iterate over the transformation rules

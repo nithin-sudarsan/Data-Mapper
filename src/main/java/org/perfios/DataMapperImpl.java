@@ -78,6 +78,39 @@ public final class DataMapperImpl implements DataMapper{
         }
     }
     /**
+     * Transforms an input JSON or XML file according to specified rules and returns an instance of the desired class type.
+     *
+     * @param input     The input JSON or XML file to be transformed.
+     * @param rules     The rules file containing transformation rules.
+     * @param className The desired class type to be returned after transformation.
+     * @param <T>       The generic type representing the desired class type.
+     * @return An instance of the desired class type, representing the transformed data.
+     * @throws IllegalArgumentException If the input or rules files are empty.
+     * @throws RuntimeException If there is an error reading the files or applying transformation rules.
+     * @author S.Nithin
+     */
+    @Override
+    public <T> T transformFile(File input, File rules, Class<T> className){
+        String inputString;
+        String rulesString;
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(input.getAbsolutePath()));
+            inputString = new String(bytes);
+            byte[] bytes2 = Files.readAllBytes(Paths.get(rules.getAbsolutePath()));
+            rulesString = new String(bytes2);
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading files: " + e.getMessage(), e);
+        }
+        if (inputString.isEmpty()  || rulesString.isEmpty()) {
+            throw new IllegalArgumentException("Invalid input: input and rules files cannot be empty.");
+        }
+        try {
+            return transformString(inputString,rulesString,className);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /**
      * Transforms a JSON or XML string according to specified rules and returns an instance of the desired class type.
      *
      * @param inputString  The JSON or XML string to be transformed.
@@ -166,6 +199,7 @@ public final class DataMapperImpl implements DataMapper{
      * @return A string representing the transformed JSON or XML input in the desired extension format.
      * @throws IllegalArgumentException If the input or rules strings are null or empty.
      * @throws RuntimeException If there is an error parsing the input, processing the rules, or applying transformation rules.
+     * @author S.Nithin
      */
     @Override
     public String getTransformedString(String input, String rules, Extension ext){

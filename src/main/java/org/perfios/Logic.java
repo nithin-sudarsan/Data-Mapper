@@ -72,7 +72,7 @@ class Logic {
                     return outputList;
                 }
                 else {
-                     throw new RuntimeException("No values found in the input file");
+                    return null;
                 }
             } else {
                 // Check if the JSON contains the key
@@ -81,7 +81,7 @@ class Logic {
                     json = ((Map<?, ?>) json).get(key);
                 } else {
                     // If the key is not found, return null
-                    throw new RuntimeException("No such key found in the input file");
+                    return null;
                 }
             }
         }
@@ -103,17 +103,14 @@ class Logic {
             String lhsString= lhs.get(0);
             Object value;
             // Check if the right-hand side contains a special keyword '#sum'
-            if (rhs.contains("#add")) {
+            if (rhs.contains("#sum")) {
                 // Concatenate values based on the specified paths
                 value = concatenateValues(json, rhs);
-            } else if (rhs.contains("#sub")){
+            } else if (rhs.contains("#diff")){
                 value = findDifference(json, rhs);
             }
-            else if (rhs.contains("#mul")){
+            else if (rhs.contains("#prod")){
                 value = findProduct(json, rhs);
-            }
-            else if (rhs.contains("#div")){
-                value = findQuotient(json, rhs);
             }
             else if (rhs.contains("#default")){
                 value= setDefault(rhs);
@@ -131,41 +128,6 @@ class Logic {
             combineMaps(transformedJson, setValueInJson(lhsString,value));
         }
         return transformedJson;
-    }
-    static Object findQuotient(Map<String, Object> json, List<String> rhs){
-        double quo = 0.0;
-        boolean initial=true;
-        // Iterate over the paths
-        for (String path : rhs) {
-            if (!path.equals("#div")) {
-                Object value= traverseJson(json,path);
-                if (value instanceof Integer || value instanceof Double) {
-                    // Numeric value found, add it to the quotient
-                    double numericValue = ((Number) value).doubleValue();
-                    if(initial){
-                        quo+=numericValue;
-                        initial=false;
-                    }
-                    else {
-                        quo/=numericValue;
-                    }
-                }
-                else if (value instanceof ArrayList) {
-                    // ArrayList value found
-                    List<?> listValue = (ArrayList<?>) value;
-                    if (areAllNumbers(listValue)) {
-                        // Nested list contains only numbers, calculate the nested quotient
-                        quo = quotientNestedNumbers(listValue,quo);
-                    } else {
-                        throw new IllegalArgumentException("illegal argument");
-                    }
-                }
-                else {
-                    throw new RuntimeException("Cannot perform division on values other than Number or ArrayList of numbers");
-                }
-            }
-        }
-        return quo;
     }
     //#SUM
     static Object concatenateValues(Map<String, Object> json, List<String> rhs){
@@ -249,11 +211,11 @@ class Logic {
                         double nestedSum = diffNestedNumbers(listValue,diff);
                         diff -= nestedSum;
                     } else {
-                        throw new RuntimeException("All elements in the ArrayList must be numbers");
+                        return null;
                     }
                 }
                 else {
-                    throw new RuntimeException("Cannot perform subtraction on values other than Number or ArrayList of numbers");
+                    return null;
                 }
             }
         }
@@ -286,11 +248,11 @@ class Logic {
                         prod = prodNestedNumbers(listValue,prod);
 
                     } else {
-                        throw new RuntimeException("All elements in the ArrayList must be numbers");
+                        return null;
                     }
                 }
                 else {
-                    throw new RuntimeException("Cannot perform multiplication on values other than Number or ArrayList of numbers");
+                    return null;
                 }
             }
         }

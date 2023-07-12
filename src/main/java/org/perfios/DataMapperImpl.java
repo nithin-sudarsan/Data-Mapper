@@ -20,14 +20,13 @@ import static org.perfios.Logic.transformJson;
 
 public final class DataMapperImpl implements DataMapper{
     /**
-     * Transforms and maps XML or JSON file to the desired bean according to the rules specified
-     * @author S Nithin
-     * @param inputPath File path of JSON or XML file to be transformed and mapped
-     * @param rulesPath File path of set of transformation rules
-     * @param className Type of the desired bean to map the transformed JSON or XML
-     * @return Desired bean of type className
-     * @throws IOException Error reading input file
-     * @Usage {@code TestModel test = dataMapper.transformFile(inputPath,rulesPath,TestModel.class);}
+     * Transforms XML or JSON file to the desired bean
+     * @param inputPath asdknad
+     * @param rulesPath
+     * @param className
+     * @return T
+     * @param <T> Model class
+     * @throws IOException
      */
     @Override
     public <T> T transformFile(String inputPath, String rulesPath, Class<T> className) throws IOException {
@@ -73,17 +72,8 @@ public final class DataMapperImpl implements DataMapper{
             throw new IllegalArgumentException("Unsupported file format: inputPath must have .json or .xml extension.");
         }
     }
-    /**
-     * Transforms and maps XML or JSON strings to the desired bean according to the rules specified
-     * @author S Nithin
-     * @param inputString JSON or XML String data to be transformed
-     * @param rulesString Transformation rules as String
-     * @param className Type of the desired bean to map the transformed JSON or XML
-     * @return Desired bean of type className
-     * @Usage {@code TestModel test = dataMapper.transformString(inputString,rulesString,TestModel.class);}
-     */
     @Override
-    public <T> T transformString(String inputString, String rulesString, Class<T> className) {
+    public <T> T transformString(String inputString, String rulesString, Class<T> className) throws JsonProcessingException {
         if (inputString == null || inputString.isEmpty() || rulesString == null || rulesString.isEmpty()) {
             throw new IllegalArgumentException("Invalid input: inputString and rulesString cannot be null or empty.");
         }
@@ -115,15 +105,6 @@ public final class DataMapperImpl implements DataMapper{
             throw new RuntimeException("Error processing input: " + e.getMessage(), e);
         }
     }
-    /**
-     * Transforms XML or JSON file to the desired bean structure according to the rules specified and returns as a String
-     * @author S Nithin
-     * @param input Input JSON or XML
-     * @param rules Rules to perform transformation
-     * @param isString True if input and rules are String; False if input and rules are file paths
-     * @return String format of the desired bean
-     * @Usage {@code String test = dataMapper.getTransformedString(inputPath,rulesPath,false);}
-     */
     @Override
     public String getTransformedString(String input, String rules, boolean isString) {
         if (isString) {

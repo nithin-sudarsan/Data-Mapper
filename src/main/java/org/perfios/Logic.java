@@ -103,13 +103,13 @@ class Logic {
             String lhsString= lhs.get(0);
             Object value;
             // Check if the right-hand side contains a special keyword '#sum'
-            if (rhs.contains("#sum")) {
+            if (rhs.contains("#add")) {
                 // Concatenate values based on the specified paths
                 value = concatenateValues(json, rhs);
-            } else if (rhs.contains("#diff")){
+            } else if (rhs.contains("#sub")){
                 value = findDifference(json, rhs);
             }
-            else if (rhs.contains("#prod")){
+            else if (rhs.contains("#mul")){
                 value = findProduct(json, rhs);
             }
             else if (rhs.contains("#default")){
@@ -138,7 +138,7 @@ class Logic {
         // Iterate over the paths
         for (String path : rhs) {
             // Exclude the special keyword '#sum'
-            if (!path.equals("#sum")) {
+            if (!path.equals("#add")) {
                 // Traverse the JSON using the specified path
                 Object value = traverseJson(json, path);
 
@@ -190,7 +190,7 @@ class Logic {
         boolean initial=true;
         // Iterate over the paths
         for (String path : rhs) {
-            if (!path.equals("#diff")) {
+            if (!path.equals("#sub")) {
                 Object value= traverseJson(json,path);
                 if (value instanceof Integer || value instanceof Double) {
                     // Numeric value found, add it to the sum
@@ -227,7 +227,7 @@ class Logic {
         boolean initial=true;
         // Iterate over the paths
         for (String path : rhs) {
-            if (!path.equals("#prod")) {
+            if (!path.equals("#mul")) {
                 Object value= traverseJson(json,path);
                 if (value instanceof Integer || value instanceof Double) {
                     // Numeric value found, add it to the sum

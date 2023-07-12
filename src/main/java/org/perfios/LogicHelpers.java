@@ -23,7 +23,7 @@ class LogicHelpers {
         }
     }
     // Helper method to check if all elements in a list (including nested lists) are numbers
-    protected static boolean areAllNumbers(List<?> list) {  //HELPER
+    protected static boolean areAllNumbers(List<?> list) {
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, continue checking
@@ -43,7 +43,7 @@ class LogicHelpers {
         return true;
     }
     // Helper method to calculate the sum of all numbers in a list (including nested lists)
-    protected static double sumNestedNumbers(List<?> list) { //HELPER
+    protected static double sumNestedNumbers(List<?> list) {
         double sum = 0.0;
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
@@ -58,7 +58,7 @@ class LogicHelpers {
         }
         return sum;
     }
-    protected static double diffNestedNumbers(List<?> list, double sum) { //HELPER
+    protected static double diffNestedNumbers(List<?> list, double sum) {
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the sum
@@ -79,7 +79,7 @@ class LogicHelpers {
     }
 
     // Method to set a value in the JSON based on the specified path
-    protected static Map<String, Object> setValueInJson(String path, Object value) { //HELPER
+    protected static Map<String, Object> setValueInJson(String path, Object value) {
         Map<String, Object> current = new HashMap<>();
         String[] keys = path.split("/");
         Map<String, Object> innerMap = current;
@@ -96,7 +96,7 @@ class LogicHelpers {
 
         return current;
     }
-    protected static List<Object> getListItems(Object json) { //LOGIC HELPERS
+    protected static List<Object> getListItems(Object json) {
         List<Object> result = new ArrayList<>();
         List<?> list = (List<?>) json;
         for (Object item : list) {
@@ -104,7 +104,7 @@ class LogicHelpers {
         }
         return result;
     }
-    protected static double prodNestedNumbers(List<?> list, double prod) { //LOGIC
+    protected static double prodNestedNumbers(List<?> list, double prod) {
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the sum
@@ -122,7 +122,7 @@ class LogicHelpers {
         }
         return prod;
     }
-    protected static double quotientNestedNumbers(List<?> list, double quo) { //LOGIC
+    protected static double quotientNestedNumbers(List<?> list, double quo) {
         for (Object item : list) {
             if (item instanceof Integer || item instanceof Double) {
                 // Numeric element found, add it to the quotient
@@ -140,7 +140,7 @@ class LogicHelpers {
         }
         return quo;
     }
-    protected static Object setDefault(List<String> rhs) {  //LOGIC
+    protected static Object setDefault(List<String> rhs) {
         int defIndex= rhs.indexOf("#default");
         return rhs.get(defIndex+1);
     }

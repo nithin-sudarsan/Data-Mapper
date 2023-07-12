@@ -112,6 +112,9 @@ class Logic {
             else if (rhs.contains("#mul")){
                 value = findProduct(json, rhs);
             }
+            else if(rhs.contains("div")){
+                value = findQuotient(json, rhs);
+            }
             else if (rhs.contains("#default")){
                 value= setDefault(rhs);
             }
@@ -257,6 +260,42 @@ class Logic {
             }
         }
         return prod;
+    }
+    static Object findQuotient(Map<String, Object> json, List<String> rhs){
+        double quo = 0.0;
+        boolean initial=true;
+        // Iterate over the paths
+        for (String path : rhs) {
+            if (!path.equals("#div")) {
+                Object value= traverseJson(json,path);
+                if (value instanceof Integer || value instanceof Double) {
+                    // Numeric value found, add it to the sum
+                    double numericValue = ((Number) value).doubleValue();
+                    if(initial){
+                        quo+=numericValue;
+                        initial=false;
+                    }
+                    else {
+                        quo/=numericValue;
+                    }
+                }
+                else if (value instanceof ArrayList) {
+                    // ArrayList value found
+                    List<?> listValue = (ArrayList<?>) value;
+                    if (areAllNumbers(listValue)) {
+                        // Nested list contains only numbers, calculate the nested sum
+                        quo = divideNestedNumbers(listValue,quo);
+
+                    } else {
+                        return null;
+                    }
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        return quo;
     }
 
 }

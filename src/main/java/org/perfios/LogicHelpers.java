@@ -122,6 +122,24 @@ class LogicHelpers {
         }
         return prod;
     }
+    protected static double divideNestedNumbers(List<?> list, double quo) { //LOGIC
+        for (Object item : list) {
+            if (item instanceof Integer || item instanceof Double) {
+                // Numeric element found, add it to the sum
+                double numericValue = ((Number) item).doubleValue();
+                if(quo==0){
+                    quo+=numericValue;
+                }
+                else {
+                    quo/=numericValue;
+                }
+            } else if (item instanceof ArrayList) {
+                // Nested list found, recursively calculate the nested sum
+                quo = divideNestedNumbers((List<?>) item,quo);
+            }
+        }
+        return quo;
+    }
     protected static Object setDefault(List<String> rhs) {  //LOGIC
         int defIndex= rhs.indexOf("#default");
         return rhs.get(defIndex+1);

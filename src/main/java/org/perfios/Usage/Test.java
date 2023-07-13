@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 public class Test {
     public static void main(String[] args) throws IOException {
         DataMapper dm= new DataMapperImpl();
-        File input = new File("/home/nithin/Desktop/sample.json");
-        File rules = new File("/home/nithin/Desktop/format.txt");
+        File input = new File("/home/nithin/Desktop/DataMapper_ITR_demo/ITR_2022-23.json");
+        File rules = new File("/home/nithin/Desktop/DataMapper_ITR_demo/rules.txt");
         String inputString;
         String rulesString;
         try {
@@ -24,7 +24,7 @@ public class Test {
         } catch (IOException e) {
             throw new RuntimeException("Error reading files: " + e.getMessage(), e);
         }
-        TestModel test1= dm.transformFile("/home/nithin/Desktop/sample.json","/home/nithin/Desktop/format.txt", TestModel.class);
+        TestModel test1= dm.transformFile("/home/nithin/Desktop/DataMapper_ITR_demo/ITR_2022-23.json","/home/nithin/Desktop/DataMapper_ITR_demo/rules.txt", TestModel.class);
         TestModel test2= dm.transformFile(input,rules, TestModel.class);
         TestModel test3= dm.transformString(inputString,rulesString, TestModel.class);
         String test4 = dm.getTransformedString(input,rules, DataMapperImpl.Extension.JSON);

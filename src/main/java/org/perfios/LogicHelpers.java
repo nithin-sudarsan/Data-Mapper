@@ -1,5 +1,13 @@
 package org.perfios;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,5 +151,37 @@ class LogicHelpers {
     protected static Object setDefault(List<String> rhs) {  //LOGIC
         int defIndex= rhs.indexOf("#default");
         return rhs.get(defIndex+1);
+    }
+    public static String removeTopmostTag(String xml) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource inputSource = new InputSource(new StringReader(xml));
+            Document document = builder.parse(inputSource);
+
+            NodeList childNodes = document.getDocumentElement().getChildNodes();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                sb.append(nodeToString(childNodes.item(i)));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return xml;
+        }
+    }
+    private static String nodeToString(Node node) {
+        StringBuilder result = new StringBuilder();
+        if (node.getNodeType() == Node.TEXT_NODE) {
+            result.append(node.getNodeValue());
+        } else {
+            result.append("<").append(node.getNodeName()).append(">");
+            NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                result.append(nodeToString(children.item(i)));
+            }
+            result.append("</").append(node.getNodeName()).append(">");
+        }
+        return result.toString();
     }
 }

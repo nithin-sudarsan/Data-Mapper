@@ -19,7 +19,8 @@ jobs:
         distribution: 'adopt'
 
     - name: Import GPG Key
-      run: gpg --import <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
+      run: |
+        echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import
 
     - name: Publish to Maven
       run: mvn --settings settings.xml deploy

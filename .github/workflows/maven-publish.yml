@@ -15,7 +15,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '17'  # Adjust the version as per your project requirements
+        java-version: '19'  # Adjust the version as per your project requirements
         distribution: 'adopt'
 
     - name: Publish to Maven

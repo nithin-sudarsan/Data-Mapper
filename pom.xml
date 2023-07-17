@@ -16,8 +16,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/perfios/Data-Mapper</url>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/octocat/hello-world</url>
         </repository>
     </distributionManagement>
     <dependencyManagement>

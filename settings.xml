@@ -14,7 +14,7 @@
     <!-- Maven passphrase server configuration -->
     <server>
         <id>gpg.passphrase.server</id>
-        <passphrase>Nithin@123</passphrase>
+        <passphrase>Nithin@2001</passphrase>
     </server>
 </servers>
 

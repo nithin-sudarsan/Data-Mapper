@@ -1,0 +1,35 @@
+<settings>
+    <servers>
+        <!-- Maven Central staging server (Sonatype Nexus) -->
+        <server>
+            <id>ossrh</id>
+            <username>nithinsudarsan</username>
+            <password>@N1i2t3h4i5n6</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>gpg</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.keyname>0F139EF6F3993BD79F9D5219D6C7CC9D648C1E4C</gpg.keyname>
+                <gpg.passphraseServerId>gpg.passphrase.server</gpg.passphraseServerId>
+            </properties>
+        </profile>
+    </profiles>
+
+    <servers>
+        <!-- Maven passphrase server configuration -->
+        <server>
+            <id>gpg.passphrase.server</id>
+            <passphrase>Nithin@123</passphrase>
+        </server>
+    </servers>
+    <activeProfiles>
+        <activeProfile>gpg</activeProfile>
+    </activeProfiles>
+</settings>

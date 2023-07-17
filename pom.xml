@@ -13,6 +13,13 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/perfios/Data-Mapper</url>
+        </repository>
+    </distributionManagement>
     <dependencyManagement>
         <dependencies>
             <dependency>

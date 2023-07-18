@@ -1,3 +1,4 @@
+
 name: Publish package to GitHub Packages
 on:
   release:
@@ -14,6 +15,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Set new version
+        run: |
+          NEW_VERSION="1.1.1"  # Replace this with the new version you want to set
+          sed -i "s/<version>.*<\/version>/<version>${NEW_VERSION}<\/version>/" pom.xml
+        env:
+          NEW_VERSION: ${{ github.ref_name }}  # This captures the tag name, you can use it instead of hardcoding the version.
       - name: Publish package
         run: mvn --batch-mode deploy
         env:

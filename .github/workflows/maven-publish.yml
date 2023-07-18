@@ -14,12 +14,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Set new version
-        run: |
-          NEW_VERSION="1.1.1"  # Replace this with the new version you want to set
-          sed -i "s/<version>.*<\/version>/<version>${NEW_VERSION}<\/version>/" pom.xml
-        env:
-          NEW_VERSION: '1.2.0'  # Replace with the version you want to set for your project (artifact).
       - name: Publish package
         run: mvn --batch-mode deploy
         env:

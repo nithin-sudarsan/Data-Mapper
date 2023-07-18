@@ -7,9 +7,11 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -235,5 +237,33 @@ public final class DataMapperImpl implements DataMapper{
             throw new RuntimeException("Error parsing input: " + e.getMessage(), e);
         }
         throw new IllegalArgumentException("Invalid input: unsupported input format or missing input.");
+    }
+
+    @Override
+    public <T> T transformBean(Object inputBean, File rules,Class<T> className) {
+        Gson gson = new GsonBuilder().create();
+        String inputString = "{\""+inputBean.getClass().getSimpleName()+"\":"+gson.toJson(inputBean)+"}";
+        String rulesString;
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(rules.getAbsolutePath()));
+            rulesString = new String(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading files: " + e.getMessage(), e);
+        }
+        if (inputString.isEmpty()  || rulesString.isEmpty()) {
+            throw new IllegalArgumentException("Invalid input: input and rules files cannot be empty.");
+        }
+        try {
+            return transformString(inputString,rulesString,className);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> T transformBean(Object inputBean, String rulesString, Class<T> className) throws JsonProcessingException {
+        Gson gson = new GsonBuilder().create();
+        String jsonString = "{\""+inputBean.getClass().getSimpleName()+"\":"+gson.toJson(inputBean)+"}";
+        return transformString(jsonString,rulesString,className);
     }
 }

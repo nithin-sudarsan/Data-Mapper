@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static org.perfios.Logic.readTransformationRules;
 import static org.perfios.Logic.transformJson;
+import static org.perfios.LogicHelpers.removeTopmostTag;
 
 public final class DataMapperImpl implements DataMapper{
     /**
@@ -217,7 +218,7 @@ public final class DataMapperImpl implements DataMapper{
                     return gson.toJson(transformedJson);
                 }
                 else if (ext.equals(Extension.XML)){
-                    return xmlMapper.writeValueAsString(transformedJson);
+                    return removeTopmostTag(xmlMapper.writeValueAsString(transformedJson));
                 }
             } else if (input.startsWith("<")) {
                 xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -227,7 +228,7 @@ public final class DataMapperImpl implements DataMapper{
                     return gson.toJson(transformedXml);
                 }
                 else if (ext.equals(Extension.XML)){
-                    return xmlMapper.writeValueAsString(transformedXml);
+                    return removeTopmostTag(xmlMapper.writeValueAsString(transformedXml));
                 }
             }
         } catch (JsonSyntaxException | JsonProcessingException e) {

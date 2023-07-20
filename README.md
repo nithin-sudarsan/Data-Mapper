@@ -21,7 +21,7 @@ To use Data Mapper in your project, include the following dependency:
 <dependency>
     <groupId>org.perfios</groupId>
     <artifactId>data-mapper</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 ## Methods exposed
@@ -30,13 +30,13 @@ Transforms a JSON or XML file according to specified rules and returns an instan
 #### Prameters expected
 <table style="border: none; width: 100%; padding: 0; margin: 0;">
   <tr>
-    <td><b><i>inputPath</i></b><br> The path to the input file (JSON or XML) to be transformed.</td>
-    <td><b><i>rulesPath</i></b><br> The path to the rules file containing transformation rules.</td>
-    <td rowspan="2"><b><i>className</i></b><br> The desired class type to be returned after transformation.</td>
+    <td><b><i>inputPath</i></b> <code>String</code><br> The path to the input file (JSON or XML) to be transformed.</td>
+    <td><b><i>rulesPath</i></b> <code>String</code><br> The path to the rules file containing transformation rules.</td>
+    <td rowspan="2"><b><i>className</i></b> <code>Class&lt;T&gt;</code><br> The desired class type to be returned after transformation.</td>
   </tr>
   <tr>
-    <td><b><i>input</i></b><br> The input JSON or XML file to be transformed.</td>
-    <td><b><i>rules</i></b><br> The rules file containing transformation rules.</td>
+    <td><b><i>input</i></b> <code>File</code><br> The input JSON or XML file to be transformed.</td>
+    <td><b><i>rules</i></b> <code>File</code><br> The rules file containing transformation rules.</td>
   </tr>
 </table>
 
@@ -72,12 +72,12 @@ Transforms a JSON or XML string according to specified rules and returns an inst
 #### Prameters expected
 <table style="border: none; width: 100%; padding: 0; margin: 0;">
   <tr>
-    <td><b><i>inputString</i></b><br>  The JSON or XML string to be transformed.</td>
-    <td><b><i>rulesString</i></b><br> The string containing transformation rules.</td>
-    <td><b><i>className</i></b><br> The desired class type to be returned after transformation.</td>
+    <td><b><i>inputString</i></b> <code>String</code> <br> The JSON or XML string to be transformed.</td>
+    <td><b><i>rulesString</i></b> <code>String</code><br> The string containing transformation rules.</td>
+    <td><b><i>className</i></b> <code>Class&lt;T&gt;</code><br> The desired class type to be returned after transformation.</td>
   </tr>
-  
 </table>
+
 
 #### Returns
 An instance of the desired class type, representing the transformed data.
@@ -116,12 +116,12 @@ Transforms an input Java Bean according to specified rules and returns another J
 #### Prameters expected
 <table style="border: none; width: 100%; padding: 0; margin: 0;">
   <tr>
-    <td rowspan="2"><b><i>inputBean</i></b><br>The input Java bean to be transformed.</td>
-    <td><b><i>rulesString</i></b><br> The rules string containing transformation rules.</td>
-    <td rowspan="2"><b><i>className</i></b><br> The desired class type to be returned after transformation.</td>
+    <td rowspan="2"><b><i>inputBean</i></b> <code>Object</code><br>The input Java bean to be transformed.</td>
+    <td><b><i>rulesString</i></b> <code>String</code><br> The rules string containing transformation rules.</td>
+    <td rowspan="2"><b><i>className</i></b> <code>Class&lt;T&gt;</code><br> The desired class type to be returned after transformation.</td>
   </tr>
   <tr>
-    <td><b><i>rules</i></b><br> The rules file containing transformation rules.</td>
+    <td><b><i>rules</i></b> <code>File</code><br> The rules file containing transformation rules.</td>
   </tr>
 </table>
 
@@ -157,13 +157,13 @@ Transforms an input JSON or XML string according to specified rules and returns 
 #### Prameters expected
 <table style="border: none; width: 100%; padding: 0; margin: 0;">
   <tr>
-    <td><b><i>input</i></b><br>The input JSON or XML string to be transformed.</td>
-    <td><b><i>rules</i></b><br> The rules string containing transformation rules.</td>
-    <td rowspan="2"><b><i>ext</i></b><br> The extension indicating the format of the input file (JSON or XML).</td>
+    <td><b><i>input</i></b> <code>String</code><br>The input JSON or XML string to be transformed.</td>
+    <td><b><i>rules</i></b> <code>String</code><br> The rules string containing transformation rules.</td>
+    <td rowspan="2"><b><i>ext</i></b> <code>DataMapperImpl.Extension</code><br> The extension indicating the format of the input file (JSON or XML).</td>
   </tr>
   <tr>
-    <td><b><i>input</i></b><br>The input JSON or XML file to be transformed.</td>
-    <td><b><i>rules</i></b><br> The rules file containing transformation rules.</td>
+    <td><b><i>input</i></b> <code>File</code><br>The input JSON or XML file to be transformed.</td>
+    <td><b><i>rules</i></b> <code>File</code><br> The rules file containing transformation rules.</td>
   </tr>
 </table>
 

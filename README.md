@@ -13,7 +13,7 @@ Data Mapper is a powerful Java library that offers a comprehensive solution for 
 - Transform data using custom rules to match specific requirements.
 - Exceptionally fast and lightweight for optimal performance.
 
-## Installation
+## <a name="installation"></a>Installation
 
 To use Data Mapper in your project, include the following dependency:
 
@@ -190,5 +190,124 @@ public class Usage
 	}
 }
 ```
+## Operations Supported
+<table>
+	<tr>
+		<td><code>#add</code></td>
+		<td>"Facilitates addition of numbers or concatenation of two input fields."</td>
+	</tr>
+	<tr>
+		<td><code>#sub</code></td>
+		<td>Facilitates subtraction of numbers between two fields from input file</td>
+	</tr>
+	<tr>
+		<td><code>#mul</code></td>
+		<td>Facilitates multiplication of numbers between two fields from input file</td>
+	</tr>
+	<tr>
+		<td><code>#div</code></td>
+		<td>Facilitates division of numbers between two fields from input file</td>
+	</tr>
+	<tr>
+		<td><code>#default</code></td>
+		<td>Facilitates setting default values for fields.</td>
+	</tr>
+</table>
+
+
+## Example Input File Structures and Output
+### JSON or XML input
+<table style="border: none; width: 100%; padding: 0; margin: 0;">
+<tr>
+	<td>Example Input JSON File  </td>
+	<td>Example Input XML File</td>
+</tr>
+<tr>
+<td>
+
+```json
+{
+  "details": {			
+    "name": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "addresses": [
+      {
+        "address1": {
+          "phoneNumber": 1234567890,
+          "state": "California"
+        }
+      },
+      {
+        "address2": {
+          "phoneNumber": 9876543210,
+          "state": "New York"
+        }
+      }
+    ]
+  }
+}
+
+```
+</td>
+<td>
+
+```xml
+<root>
+    <details>
+        <name>
+            <firstName>Jane</firstName>
+            <lastName>Doe</lastName>
+	</name>
+	<addresses>
+	    <address1>
+	        <phoneNumber>5555555555</phoneNumber>
+		<state>Texas</state>
+	    </address1>
+	</addresses>
+	<addresses>
+	    <address2>
+		<phoneNumber>1234567890</phoneNumber>
+		<state>Washington</state>
+	    </address2>
+	</addresses>
+    </details>
+</root>
+
+```
+ 
+</td>	
+</tr>
+	
+</table>
+
+### Example Rules File:
+<i>rules.txt</i>
+<table width="100%">
+	<tr>
+		<td><b>PersonalInfo/name</b> = details/name/firstName #add details/name/lastName</td>
+	</tr>
+	<tr>
+		<td><b>PersonalInfo/details</b> = details/addresses[]/address1/state</td>
+	</tr>
+	<tr>
+		<td><b>PersonalInfo/age</b> = #default 25</td>
+	</tr>
+</table>
+
+### Output Java bean structure
+```java
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class PersonalInfo {
+    String name;
+    String age;
+    Object details;
+}
+```
+
 ## Contact
 If you have any questions or feedback, feel free to reach out to us via [e-mail](mailto:nithinsudarsan740@gmail.com) .

@@ -4,7 +4,15 @@
 
 Data Mapper is a powerful Java library that offers a comprehensive solution for parsing, transforming, and mapping JSON or XML files to Java beans, driven by a given set of rules. It is designed to simplify the process of data manipulation and conversion in your Java projects.
 <br><br> With the latest version, Data Mapper introduces a new feature that allows seamless transformation of one Java bean to another type. Now, you can effortlessly convert your Java beans between different classes, making it even more versatile and adaptable to various data processing scenarios.
+1. [ Features ](#features)
+2. [ Installation ](#installation)
+3. [ Methods Exposed ](#methods)
+4. [ Operations Supported ](#operations)
+5. [ Input File Structures ](#inputoutput)
+6. [ Contact ](#contact)
 
+
+<a name="features"></a>
 ## Features
 - Effortlessly parse JSON and XML files into Java beans.
 - Seamlessly transform JSON and XML strings into Java beans.
@@ -13,7 +21,8 @@ Data Mapper is a powerful Java library that offers a comprehensive solution for 
 - Transform data using custom rules to match specific requirements.
 - Exceptionally fast and lightweight for optimal performance.
 
-## <a name="installation"></a>Installation
+<a name="installation"></a>
+## Installation
 
 To use Data Mapper in your project, include the following dependency:
 
@@ -24,6 +33,8 @@ To use Data Mapper in your project, include the following dependency:
     <version>1.1.1</version>
 </dependency>
 ```
+
+<a name="methods"></a>
 ## Methods exposed
 ### 1. `transformFile`
 Transforms a JSON or XML file according to specified rules and returns an instance of the desired class type. <br>The overloaded version of this method accepts JSON or XML along with the rules as `File` type to perform the same.
@@ -190,6 +201,7 @@ public class Usage
 	}
 }
 ```
+<a name="operations"></a>
 ## Operations Supported
 <table>
 	<tr>
@@ -214,7 +226,7 @@ public class Usage
 	</tr>
 </table>
 
-
+<a name="inputoutput"></a>
 ## Example Input File Structures and Output
 ### JSON or XML input
 <table style="border: none; width: 100%; padding: 0; margin: 0;">
@@ -308,6 +320,6 @@ public class PersonalInfo {
     Object details;
 }
 ```
-
+<a name="contact"></a>
 ## Contact
 If you have any questions or feedback, feel free to reach out to us via [e-mail](mailto:nithinsudarsan740@gmail.com) .

@@ -4,6 +4,8 @@
 
 Data Mapper is a powerful Java library that offers a comprehensive solution for parsing, transforming, and mapping JSON or XML files to Java beans, driven by a given set of rules. It is designed to simplify the process of data manipulation and conversion in your Java projects.
 <br><br> With the latest version, Data Mapper introduces a new feature that allows seamless transformation of one Java bean to another type. Now, you can effortlessly convert your Java beans between different classes, making it even more versatile and adaptable to various data processing scenarios.
+
+## Table of Contents
 1. [ Features ](#features)
 2. [ Installation ](#installation)
 3. [ Methods Exposed ](#methods)

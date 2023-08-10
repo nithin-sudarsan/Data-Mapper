@@ -8,10 +8,7 @@ import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class LogicHelpers {
     static void combineMaps(Map<String, Object> targetMap, Map<String, Object> sourceMap) {
@@ -183,5 +180,20 @@ class LogicHelpers {
             result.append("</").append(node.getNodeName()).append(">");
         }
         return result.toString();
+    }
+    public static String extractFieldName(String fullFieldPath) {
+        String[] parts = fullFieldPath.split("/");
+
+        if (parts.length > 1) {
+            return String.join(".", Arrays.copyOfRange(parts, 1, parts.length));
+        }
+
+        return "";
+    }
+    public static String convertPackageToPath(String inputString) {
+        if (inputString.contains(".")) {
+            return inputString.replace(".", "/");
+        }
+        return inputString+"/";
     }
 }

@@ -14,5 +14,9 @@ public interface DataMapper {
     String getTransformedString(String input, String rules, DataMapperImpl.Extension ext);
     <T> T transformBean(Object inputBean, File rules, Class<T> className);
     <T> T transformBean(Object inputBean, String rulesString, Class<T> className) throws JsonProcessingException;
+    void generateMapstructInterface(String rulesPath) throws IOException;
+    void generateMapstructInterface(String rulesPath, String outputPackage) throws IOException;
+    void generateMapstructInterface(File rules, String outputPackage) throws IOException;
+    void generateMapstructInterface(File rules) throws IOException;
 
 }

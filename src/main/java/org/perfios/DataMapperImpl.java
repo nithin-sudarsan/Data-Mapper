@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 import static org.perfios.Logic.readTransformationRules;
 import static org.perfios.Logic.transformJson;
-import static org.perfios.LogicHelpers.removeTopmostTag;
+import static org.perfios.LogicHelpers.*;
 
 public final class DataMapperImpl implements DataMapper{
     /**
@@ -38,6 +39,7 @@ public final class DataMapperImpl implements DataMapper{
      */
     @Override
     public <T> T transformFile(String inputPath, String rulesPath, Class<T> className) throws IOException {
+
         if (inputPath == null || inputPath.isEmpty() || rulesPath == null || rulesPath.isEmpty()) {
             throw new IllegalArgumentException("Invalid input: inputPath and rulesPath cannot be null or empty.");
         }
@@ -63,7 +65,7 @@ public final class DataMapperImpl implements DataMapper{
                 throw new RuntimeException("Error parsing JSON input: " + e.getMessage());
             }
         } else if (inputPath.endsWith(".xml")) {
-            final var xmlMapper = new XmlMapper();
+            final XmlMapper xmlMapper = new XmlMapper();
             // Enable XML-specific features (optional)
             xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
             try{
@@ -265,5 +267,209 @@ public final class DataMapperImpl implements DataMapper{
         Gson gson = new GsonBuilder().create();
         String jsonString = "{\""+inputBean.getClass().getSimpleName()+"\":"+gson.toJson(inputBean)+"}";
         return transformString(jsonString,rulesString,className);
+    }
+
+    @Override
+    public void generateMapstructInterface(String rulesPath) throws IOException {
+        generateMapstructInterface(rulesPath,"");
+    }
+
+    @Override
+    public void generateMapstructInterface(String rulesPath, String outputPackage) throws IOException {
+        Path path = Paths.get(rulesPath);
+        String fileContent = new String(Files.readAllBytes(path));
+
+        String[] ruleLines = fileContent.split("\\n");
+        String interfaceName = null;
+        String sourceClassName = null;
+        String targetClassName = null;
+
+        StringBuilder targetContent = new StringBuilder();
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+
+            if (interfaceName == null) {
+                String[] interfaceNameParts = sourceField.split("/");
+                if (interfaceNameParts.length > 1) {
+                    interfaceName = interfaceNameParts[0].trim() + "Mapper";
+                }
+            }
+
+            if (sourceClassName == null) {
+                String[] sourceClassNameParts = targetField.split("/");
+                if (sourceClassNameParts.length > 1) {
+                    sourceClassName = sourceClassNameParts[0].trim();
+                }
+            }
+
+            if (targetClassName == null) {
+                String[] targetClassNameParts = sourceField.split("/");
+                if (targetClassNameParts.length > 1) {
+                    targetClassName = targetClassNameParts[0].trim();
+                }
+            }
+
+        }
+        targetContent.append("// To import relevant libraries, please check \"Add unambiguous imports on the fly\" in File -> Settings -> Editor -> General -> Auto Import -> Java\n");
+        targetContent.append("@Mapper()\n");
+        targetContent.append("public interface ")
+                .append(interfaceName)
+                .append(" {\n");
+        targetContent.append("    ")
+                .append(interfaceName)
+                .append(" INSTANCE = Mappers.getMapper(")
+                .append(interfaceName)
+                .append(".class);\n\n");
+
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+            String sourceFieldName = extractFieldName(sourceField);
+            String targetFieldName = extractFieldName(targetField);
+
+            if (!sourceFieldName.equals(targetFieldName)) {
+                if (!sourceField.equals(sourceClassName + "/")) {
+                    targetContent.append("    @Mapping(source = \"")
+                            .append(targetFieldName)
+                            .append("\", target = \"")
+                            .append(sourceFieldName)
+                            .append("\")\n");
+                }
+            }
+
+        }
+
+        targetContent.append("    ")
+                .append(targetClassName)
+                .append(" ")
+                .append(sourceClassName)
+                .append("To")
+                .append(targetClassName)
+                .append("(")
+                .append(sourceClassName)
+                .append(" ")
+                .append(sourceClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("    @InheritInverseConfiguration\n");
+        targetContent.append("    ")
+                .append(sourceClassName)
+                .append(" ")
+                .append(targetClassName)
+                .append("To")
+                .append(sourceClassName)
+                .append("(")
+                .append(targetClassName)
+                .append(" ")
+                .append(targetClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("}");
+        String outputPath=convertPackageToPath(outputPackage);
+        Path targetFilePath = Paths.get("src/main/java/"+outputPath+interfaceName + ".java");
+        Files.write(targetFilePath, targetContent.toString().getBytes());
+        System.out.println("Mapper interface generated."+"\nFile location: src/main/java/"+interfaceName + ".java");
+    }
+
+    @Override
+    public void generateMapstructInterface(File rules, String outputPackage) throws IOException{
+        String fileContent = new String(Files.readAllBytes(rules.toPath()));
+        String[] ruleLines = fileContent.split("\\n");
+        String interfaceName = null;
+        String sourceClassName = null;
+        String targetClassName = null;
+
+        StringBuilder targetContent = new StringBuilder();
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+
+            if (interfaceName == null) {
+                String[] interfaceNameParts = sourceField.split("/");
+                if (interfaceNameParts.length > 1) {
+                    interfaceName = interfaceNameParts[0].trim() + "Mapper";
+                }
+            }
+
+            if (sourceClassName == null) {
+                String[] sourceClassNameParts = targetField.split("/");
+                if (sourceClassNameParts.length > 1) {
+                    sourceClassName = sourceClassNameParts[0].trim();
+                }
+            }
+
+            if (targetClassName == null) {
+                String[] targetClassNameParts = sourceField.split("/");
+                if (targetClassNameParts.length > 1) {
+                    targetClassName = targetClassNameParts[0].trim();
+                }
+            }
+
+        }
+        targetContent.append("// To import relevant libraries, please check \"Add unambiguous imports on the fly\" in File -> Settings -> Editor -> General -> Auto Import -> Java\n");
+        targetContent.append("@Mapper()\n");
+        targetContent.append("public interface ")
+                .append(interfaceName)
+                .append(" {\n");
+        targetContent.append("    ")
+                .append(interfaceName)
+                .append(" INSTANCE = Mappers.getMapper(")
+                .append(interfaceName)
+                .append(".class);\n\n");
+
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+            String sourceFieldName = extractFieldName(sourceField);
+            String targetFieldName = extractFieldName(targetField);
+
+            if (!sourceFieldName.equals(targetFieldName)) {
+                if (!sourceField.equals(sourceClassName + "/")) {
+                    targetContent.append("    @Mapping(source = \"")
+                            .append(targetFieldName)
+                            .append("\", target = \"")
+                            .append(sourceFieldName)
+                            .append("\")\n");
+                }
+            }
+
+        }
+
+        targetContent.append("    ")
+                .append(targetClassName)
+                .append(" ")
+                .append(sourceClassName)
+                .append("To")
+                .append(targetClassName)
+                .append("(")
+                .append(sourceClassName)
+                .append(" ")
+                .append(sourceClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("    @InheritInverseConfiguration\n");
+        targetContent.append("    ")
+                .append(sourceClassName)
+                .append(" ")
+                .append(targetClassName)
+                .append("To")
+                .append(sourceClassName)
+                .append("(")
+                .append(targetClassName)
+                .append(" ")
+                .append(targetClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("}");
+        String outputPath=convertPackageToPath(outputPackage);
+        Path targetFilePath = Paths.get("src/main/java/"+outputPath+interfaceName + ".java");
+        Files.write(targetFilePath, targetContent.toString().getBytes());
+        System.out.println("Mapper interface generated."+"\nFile location: src/main/java/"+interfaceName + ".java");
+    }
+
+    @Override
+    public void generateMapstructInterface(File rules) throws IOException {
+        generateMapstructInterface(rules,"");
     }
 }

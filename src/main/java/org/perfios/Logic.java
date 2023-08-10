@@ -118,6 +118,9 @@ class Logic {
             else if (rhs.contains("#default")){
                 value= setDefault(rhs);
             }
+            else if (rhs.contains("#addList")){
+                value = concatenateValues(json,rhs);
+            }
             else {
                 // Join the elements of the right-hand side list with '/' separator
                 String rhsString = String.join("/", rhs);

@@ -1,40 +1,40 @@
 package org.perfios.Usage;
 
 public class TestModel2 {
-    String newName;
-    String newAge;
-    Object newDetails;
+    String empName;
+    String empAge;
+    Object empAddress;
 
     public TestModel2() {
     }
 
-    public TestModel2(String newName, String newAge, Object newDetails) {
-        this.newName = newName;
-        this.newAge = newAge;
-        this.newDetails = newDetails;
+    public String getEmpName() {
+        return empName;
     }
 
-    public void setNewName(String newName) {
-        this.newName = newName;
+    public String getEmpAge() {
+        return empAge;
     }
 
-    public void setNewAge(String newAge) {
-        this.newAge = newAge;
+    public Object getEmpAddress() {
+        return empAddress;
     }
 
-    public void setNewDetails(Object newDetails) {
-        this.newDetails = newDetails;
+    public void setEmpName(String empName) {
+        this.empName = empName;
     }
 
-    public String getNewName() {
-        return newName;
+    public void setEmpAge(String empAge) {
+        this.empAge = empAge;
     }
 
-    public String getNewAge() {
-        return newAge;
+    public void setEmpAddress(Object empAddress) {
+        this.empAddress = empAddress;
     }
 
-    public Object getNewDetails() {
-        return newDetails;
+    public TestModel2(String empName, String empAge, Object empAddress) {
+        this.empName = empName;
+        this.empAge = empAge;
+        this.empAddress = empAddress;
     }
 }

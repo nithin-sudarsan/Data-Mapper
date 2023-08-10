@@ -3,18 +3,19 @@ package org.perfios.Usage;
 public class TestModel {
     String name;
     String age;
-    Object details;
+    String netIncome;
+    Object primaryAddress;
+    Object secondaryAddress;
 
-    public void setName(String name) {
+    public TestModel(String name, String age, String netIncome, Object primaryAddress, Object secondaryAddress) {
         this.name = name;
-    }
-
-    public void setAge(String age) {
         this.age = age;
+        this.netIncome = netIncome;
+        this.primaryAddress = primaryAddress;
+        this.secondaryAddress = secondaryAddress;
     }
 
-    public void setDetails(Object details) {
-        this.details = details;
+    public TestModel() {
     }
 
     public String getName() {
@@ -25,16 +26,35 @@ public class TestModel {
         return age;
     }
 
-    public Object getDetails() {
-        return details;
+    public String getNetIncome() {
+        return netIncome;
     }
 
-    public TestModel() {
+    public Object getPrimaryAddress() {
+        return primaryAddress;
     }
 
-    public TestModel(String name, String age, Object details) {
+    public Object getSecondaryAddress() {
+        return secondaryAddress;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setAge(String age) {
         this.age = age;
-        this.details = details;
+    }
+
+    public void setNetIncome(String netIncome) {
+        this.netIncome = netIncome;
+    }
+
+    public void setPrimaryAddress(Object primaryAddress) {
+        this.primaryAddress = primaryAddress;
+    }
+
+    public void setSecondaryAddress(Object secondaryAddress) {
+        this.secondaryAddress = secondaryAddress;
     }
 }

@@ -18,5 +18,6 @@ public interface DataMapper {
     void generateMapstructInterface(String rulesPath, String outputPackage) throws IOException;
     void generateMapstructInterface(File rules, String outputPackage) throws IOException;
     void generateMapstructInterface(File rules) throws IOException;
+    String generateMapStructInterfaceString(File rules) throws IOException;
 
 }

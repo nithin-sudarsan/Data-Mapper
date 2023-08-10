@@ -472,4 +472,96 @@ public final class DataMapperImpl implements DataMapper{
     public void generateMapstructInterface(File rules) throws IOException {
         generateMapstructInterface(rules,"");
     }
+    @Override
+    public String generateMapStructInterfaceString(File rules) throws IOException {
+        String fileContent = new String(Files.readAllBytes(rules.toPath()));
+        String[] ruleLines = fileContent.split("\\n");
+        String interfaceName = null;
+        String sourceClassName = null;
+        String targetClassName = null;
+
+        StringBuilder targetContent = new StringBuilder();
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+
+            if (interfaceName == null) {
+                String[] interfaceNameParts = sourceField.split("/");
+                if (interfaceNameParts.length > 1) {
+                    interfaceName = interfaceNameParts[0].trim() + "Mapper";
+                }
+            }
+
+            if (sourceClassName == null) {
+                String[] sourceClassNameParts = targetField.split("/");
+                if (sourceClassNameParts.length > 1) {
+                    sourceClassName = sourceClassNameParts[0].trim();
+                }
+            }
+
+            if (targetClassName == null) {
+                String[] targetClassNameParts = sourceField.split("/");
+                if (targetClassNameParts.length > 1) {
+                    targetClassName = targetClassNameParts[0].trim();
+                }
+            }
+
+        }
+        targetContent.append("// To import relevant libraries, please check \"Add unambiguous imports on the fly\" in File -> Settings -> Editor -> General -> Auto Import -> Java\n");
+        targetContent.append("@Mapper()\n");
+        targetContent.append("public interface ")
+                .append(interfaceName)
+                .append(" {\n");
+        targetContent.append("    ")
+                .append(interfaceName)
+                .append(" INSTANCE = Mappers.getMapper(")
+                .append(interfaceName)
+                .append(".class);\n\n");
+
+        for (String ruleLine : ruleLines) {
+            String[] ruleParts = ruleLine.split("=");
+            String sourceField = ruleParts[0].trim();
+            String targetField = ruleParts[1].trim();
+            String sourceFieldName = extractFieldName(sourceField);
+            String targetFieldName = extractFieldName(targetField);
+
+            if (!sourceFieldName.equals(targetFieldName)) {
+                if (!sourceField.equals(sourceClassName + "/")) {
+                    targetContent.append("    @Mapping(source = \"")
+                            .append(targetFieldName)
+                            .append("\", target = \"")
+                            .append(sourceFieldName)
+                            .append("\")\n");
+                }
+            }
+
+        }
+
+        targetContent.append("    ")
+                .append(targetClassName)
+                .append(" ")
+                .append(sourceClassName)
+                .append("To")
+                .append(targetClassName)
+                .append("(")
+                .append(sourceClassName)
+                .append(" ")
+                .append(sourceClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("    @InheritInverseConfiguration\n");
+        targetContent.append("    ")
+                .append(sourceClassName)
+                .append(" ")
+                .append(targetClassName)
+                .append("To")
+                .append(sourceClassName)
+                .append("(")
+                .append(targetClassName)
+                .append(" ")
+                .append(targetClassName.toLowerCase())
+                .append(");\n\n");
+        targetContent.append("}");
+        return targetContent.toString();
+    }
 }

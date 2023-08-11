@@ -112,7 +112,7 @@ class Logic {
             else if (rhs.contains("#mul")){
                 value = findProduct(json, rhs);
             }
-            else if(rhs.contains("div")){
+            else if(rhs.contains("#div")){
                 value = findQuotient(json, rhs);
             }
             else if (rhs.contains("#default")){
@@ -215,7 +215,13 @@ class Logic {
                     if (areAllNumbers(listValue)) {
                         // Nested list contains only numbers, calculate the nested sum
                         double nestedSum = diffNestedNumbers(listValue,diff);
-                        diff -= nestedSum;
+                        if(initial){
+                            diff+=nestedSum;
+                            initial=false;
+                        }
+                        else {
+                            diff=nestedSum;
+                        }
                     } else {
                         throw new RuntimeException("All elements in the ArrayList must be numbers");
                     }
